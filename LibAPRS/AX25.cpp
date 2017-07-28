@@ -16,6 +16,9 @@
 extern int LibAPRS_vref;
 extern bool LibAPRS_open_squelch;
 
+size_t ctxbufflen;
+uint8_t * ctxbuffer;
+
 void ax25_init(AX25Ctx *ctx, ax25_callback_t hook) {
     memset(ctx, 0, sizeof(*ctx));
     ctx->hook = hook;
@@ -25,6 +28,8 @@ void ax25_init(AX25Ctx *ctx, ax25_callback_t hook) {
 static void ax25_decode(AX25Ctx *ctx) {
     AX25Msg msg;
     uint8_t *buf = ctx->buf;
+    ctxbufflen = ctx->frame_len - 2;
+    ctxbuffer = ctx->buf;
 
     DECODE_CALL(buf, msg.dst.call);
     msg.dst.ssid = (*buf++ >> 1) & 0x0F;

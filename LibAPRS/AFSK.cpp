@@ -328,7 +328,6 @@ void AFSK_adc_isr(Afsk *afsk, int8_t currentSample) {
     // We then lowpass-filter the samples with a
     // Chebyshev filter. The lowpass filtering serves
     // to "smooth out" the variations in the samples.
-
     afsk->iirX[0] = afsk->iirX[1];
     afsk->iirX[1] = ((int8_t)fifo_pop(&afsk->delayFifo) * currentSample) >> 2;
 
