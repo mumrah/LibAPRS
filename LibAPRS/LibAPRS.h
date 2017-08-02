@@ -8,6 +8,7 @@
 #include "AFSK.h"
 #include "AX25.h"
 
+void APRS_init(Afsk *modem, int reference, bool open_squelch);
 void APRS_init(int reference, bool open_squelch);
 void APRS_poll(void);
 

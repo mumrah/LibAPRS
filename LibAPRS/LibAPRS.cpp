@@ -2,7 +2,6 @@
 #include "AFSK.h"
 #include "AX25.h"
 
-Afsk modem;
 AX25Ctx AX25;
 extern void aprs_msg_callback(struct AX25Msg *msg);
 #define countof(a) sizeof(a)/sizeof(a[0])
@@ -51,12 +50,17 @@ size_t lastMessageLen;
 bool message_autoAck = false;
 /////////////////////////
 
-void APRS_init(int reference, bool open_squelch) {
-    LibAPRS_vref = reference;
-    LibAPRS_open_squelch = open_squelch;
+void APRS_init(Afsk *user_modem, int reference, bool open_squelch) {
+  LibAPRS_vref = reference;
+  LibAPRS_open_squelch = open_squelch;
 
-    AFSK_init(&modem);
-    ax25_init(&AX25, aprs_msg_callback);
+  AFSK_init(user_modem);
+  ax25_init(&AX25, aprs_msg_callback);
+}
+
+void APRS_init(int reference, bool open_squelch) {
+    Afsk modem;
+    APRS_init(&modem, reference, open_squelch);
 }
 
 void APRS_poll(void) {
