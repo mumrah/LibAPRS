@@ -8,6 +8,7 @@
 #include <avr/pgmspace.h>
 #include "FIFO.h"
 #include "HDLC.h"
+#include <DAC.h>
 
 #define SIN_LEN 512
 static const uint8_t sin_table[] PROGMEM =
@@ -28,7 +29,6 @@ inline static uint8_t sinSample(uint16_t i) {
     uint8_t sine = pgm_read_byte(&sin_table[newI]);
     return (i >= (SIN_LEN/2)) ? (255 - sine) : sine;
 }
-
 
 #define SWITCH_TONE(inc)  (((inc) == MARK_INC) ? SPACE_INC : MARK_INC)
 #define BITS_DIFFER(bits1, bits2) (((bits1)^(bits2)) & 0x01)

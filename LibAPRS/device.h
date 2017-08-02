@@ -23,10 +23,15 @@
 #if TARGET_CPU == m328p
     #define DAC_PORT PORTD
     #define DAC_DDR  DDRD
+    #define DAC_SPI_CS 10 // Chip Select (Slave Select)
     #define LED_PORT PORTB
     #define LED_DDR  DDRB
     #define ADC_PORT PORTC
     #define ADC_DDR  DDRC
+#endif
+
+#ifndef DAC_MODE
+  #define DAC_MODE SPI_DAC
 #endif
 
 #endif

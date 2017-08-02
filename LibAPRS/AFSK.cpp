@@ -1,6 +1,7 @@
 #include <string.h>
 #include "AFSK.h"
 #include "Arduino.h"
+#include "DAC.h"
 
 extern unsigned long custom_preamble;
 extern unsigned long custom_tail;
@@ -10,7 +11,6 @@ extern bool LibAPRS_open_squelch;
 bool hw_afsk_dac_isr = false;
 bool hw_5v_ref = false;
 Afsk *AFSK_modem;
-
 
 // Forward declerations
 int afsk_getchar(void);
@@ -52,7 +52,7 @@ void AFSK_hw_init(void) {
                 _BV(ADIE) |
                 _BV(ADPS2);
 
-    AFSK_DAC_INIT();
+    DAC_init();
     LED_TX_INIT();
     LED_RX_INIT();
 }
@@ -461,9 +461,9 @@ ISR(ADC_vect) {
     TIFR1 = _BV(ICF1);
     AFSK_adc_isr(AFSK_modem, ((int16_t)((ADC) >> 2) - 128));
     if (hw_afsk_dac_isr) {
-        DAC_PORT = (AFSK_dac_isr(AFSK_modem) & 0xF0) | _BV(3); 
+      DAC_analogWrite((AFSK_dac_isr(AFSK_modem) & 0xF0) | _BV(3));
     } else {
-        DAC_PORT = 128;
+      DAC_analogWrite(128);
     }
 
     poll_timer++;
